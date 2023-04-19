@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Shopping Cart</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body onload="renderProducts()">
+	
+	
+	
+	<nav>
+		<header>
+			<nav>
+			  <ul>
+				<li><a href="#">HOME</a></li>
+				<li><a href="#">SHOP</a></li>
+				<li><a href="#">ABOUT US</a></li>
+				<li><a href="#">CONTACT</a></li>
+				<li><a href="#" id="cart-link">Cart</a></li>
+			  </ul>
+			</nav>
+		  </header>
+	</nav>
+<main>
+	<div class="heading-text">
+		<h1>Welcome to our online shop!</h1>
+		<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit reiciendis nostrum laboriosam aliquid quasi illum delectus unde facilis nisi laborum. Fuga, ratione necessitatibus quibusdam in tempora voluptatum magnam at laborum! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque, magnam. Magnam nobis eaque cum sequi ipsa excepturi obcaecati nam provident expedita commodi fugit, minima ad odit amet praesentium suscipit iste mollitia aperiam omnis quaerat ab id soluta delectus molestiae? At suscipit omnis cupiditate harum voluptas neque nemo a delectus quaerat, quod beatae atque id sed ipsum! Quam, eos dolores odio consequatur neque provident sequi necessitatibus veritatis fuga magni. Laborum dolorem officiis eius repellendus at sequi, animi corrupti iusto aliquid quae quia aut sint labore consectetur quo, minima ipsa? Minima quisquam facere iste eius quas laborum autem consequuntur molestias a accusamus.</p>
+	</div>
+	<img class="second-img" src="pics/pexels-photo-3826676.jpeg" alt="">
+</main>
+
+
+
+
+
+	
+	<section id="section">
+		
+	</section>
+	
+	<div id="cart-modal" class="modal">
+		<div class="modal-content">
+		  <span class="close">&times;</span>
+		  <h2>Cart</h2>
+		  <ul id="cart-items">
+		  </ul>
+		  <p class="total-cart">Total: $<span id="cart-total"></span></p>
+		  <button>Checkout</button>
+		</div>
+	  </div>
+
+	  <div class="all-contact">
+	  <div class="contact-div">
+		<h3 class="contact-heading">Contact Us</h3>
+		<p class="contact-info">Shopping Co. <br>
+			Canadian Head Office <br>
+			14th Floor, suite 1508 <br>
+			Vancouver,BC, B5V6X7</p>
+</div>
+		
+<div class="social-div">
+			<h3 class="social-heading">Social Media</h3>
+			<div class="div-image"><img class="instagram-img" src="pics/instagram.png" alt=""><p class="social-instagram">Instagram</p> <br>
+			<img class="twitter-img" src="pics/Twitter-Logo.png" alt=""><p class="social-twitter">Twitter</p></div>
+		</div>
+		</div> 
+
+
+		
+
+
+		
+
+
+
+
+
+
+
+
+	
+	<!--<script type="text/javascript" src="script.js"></script>-->
+	<script>
+		var cartLink = document.getElementById("cart-link");
+		var cartModal = document.getElementById("cart-modal");
+		var closeButton = document.getElementsByClassName("close")[0];
+		var cartItems = document.getElementById("cart-items");
+		var cartTotal = document.getElementById("cart-total");
+		const sectionContainer = document.getElementById("section");
+
+		var itemsInCart = [];
+	
+		function addToCart(itemName, itemPrice) {
+		  var item = { name: itemName, price: itemPrice };
+		  itemsInCart.push(item);
+		  updateCart();
+		}
+		function renderProducts() {
+  const url = `https://fakestoreapi.com/products`;
+
+  fetch(url)
+    .then((response) => response.json()) //log
+    .then((data) => {
+      const products = data;
+      products.forEach((product) => {
+        const productDetails = `
+          <ul>
+            <li>
+              <img src="${product.image}" alt="Product">
+              <h3>${product.title}</h3>
+              <p>${product.description.substring(0,130)}... <span id="showMore">Show more</span></p>
+              <button id="btn" onclick="addToCart('${product.title}', ${product.price})">Add to Cart</button>  
+            </li> 
+          </ul>
+        `;
+        sectionContainer.insertAdjacentHTML("beforeend", productDetails);
+      });
+    })
+    .catch((error) => {
+      sectionContainer.innerHTML = `<p>Something went wrong. Please try again later.</p>`;
+      console.error(error);
+    });
+}
+	
+		function updateCart() {
+		  cartItems.innerHTML = "";
+		  var total = 0; //ukupna cijena proizvoda, kasnije +price;
+		  for (var i = 0; i < itemsInCart.length; i++) {
+			var item = itemsInCart[i];
+			var li = document.createElement("li"); //kreiran li
+			li.textContent = item.name + " - $" + item.price;
+			cartItems.appendChild(li);
+			total += item.price;
+		  }
+		  cartTotal.textContent = total.toFixed(2);
+		  cartLink.textContent = "Cart (" + itemsInCart.length + ")";
+		}
+	
+		cartLink.addEventListener("click", function() {
+		  cartModal.style.display = "block";
+		});
+	
+		closeButton.addEventListener("click", function() {
+		  cartModal.style.display = "none";
+		});
+	
+		window.addEventListener("click", function(event) {
+		  if (event.target == cartModal) {
+			cartModal.style.display = "none";
+		  }
+		});
+	  </script>
+</body>
+</html>
